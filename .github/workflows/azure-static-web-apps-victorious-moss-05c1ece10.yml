@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     permissions:
+       id-token: write
        contents: read
        pull-requests: write
     steps:
@@ -22,12 +23,23 @@ jobs:
         with:
           submodules: true
           lfs: false
+      # OIDC: Azure autentica el deploy con este token.
+      # No lleva "npm install @actions/core": github-script ya expone `core`
+      # como global. Ese npm install generaba un package.json en la raiz del
+      # repo y hacia que Oryx creyera que esto era una app de Node.
+      - name: Get Id Token
+        uses: actions/github-script@v7
+        id: idtoken
+        with:
+          script: return await core.getIDToken()
+          result-encoding: string
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_VICTORIOUS_MOSS_05C1ECE10 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+          github_id_token: ${{ steps.idtoken.outputs.result }}
           action: "upload"
           ###### Repository/Build Configurations ######
           # Sitio HTML estático: no hay nada que compilar.
