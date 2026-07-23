@@ -1,0 +1,22 @@
+# Basura de compresión de macOS
+__MACOSX/
+.DS_Store
+Thumbs.db
+
+# PDFs fuente de los trípticos: el sitio no los referencia (10 MB)
+*.pdf
+
+# Archivos de trabajo internos.
+# Azure publica TODO lo que esté en el repo (app_location: "/"),
+# así que lo que no deba ser público no se versiona.
+propuesta2.html
+trippticos_contenido.txt
+
+# Configuración local de herramientas
+.claude/
+
+# Artefactos de Node: si aparecen en la raíz, Oryx cree que esto es
+# una app de Node y rompe el deploy de Azure.
+node_modules/
+package.json
+package-lock.json
