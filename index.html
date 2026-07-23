@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPINNA Veracruz - El Sendero de tus Derechos</title>
+    <link rel="icon" href="Logos/SIPINNA-Logo_Ícono-Guinda.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        guinda: '#5c113c',
+                        'guinda-dark': '#38091f',
+                        oro: '#B19657',
+                        dorado: '#DDB304',
+                        arena: '#F4F0E9',
+                        cielo: '#bfe3f7',
+                    },
+                    fontFamily: {
+                        title: ['"Baloo 2"', 'cursive'],
+                        body: ['Fredoka', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --color-guinda: #5c113c;
+            --color-guinda-dark: #38091f;
+            --color-oro: #B19657;
+            --color-dorado: #DDB304;
+            --color-arena: #F4F0E9;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Fredoka', sans-serif;
+            color: #3a2230;
+            overflow-x: hidden;
+            background: #faf6ef;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-title {
+            font-family: 'Baloo 2', cursive;
+        }
+
+        section,
+        footer {
+            scroll-margin-top: 92px;
+        }
+
+        /* ================= FONDOS ================= */
+        /* Hero: escena de árboles caricatura (cielo crema arriba, pasto abajo) */
+        .hero-bg {
+            background: #f3f4e8 url('imagenes/fondo arboles.png') center bottom / cover no-repeat;
+        }
+
+        /* Sección de los 20 derechos: cielo caricatura */
+        .sky-bg {
+            background-image: url('imagenes/fondo_cielo.png');
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+        }
+
+        /* ================= FILTROS DE TINTE PARA DOODLES ================= */
+        .tint-dorado {
+            filter: brightness(0) saturate(100%) invert(72%) sepia(64%) saturate(1352%) hue-rotate(1deg) brightness(96%) contrast(90%);
+        }
+
+        .tint-guinda {
+            filter: brightness(0) saturate(100%) invert(11%) sepia(35%) saturate(3800%) hue-rotate(298deg) brightness(80%) contrast(95%);
+        }
+
+        .tint-oro {
+            filter: brightness(0) saturate(100%) invert(63%) sepia(21%) saturate(900%) hue-rotate(3deg) brightness(92%) contrast(88%);
+        }
+
+        .tint-arena {
+            filter: brightness(0) saturate(100%) invert(97%) sepia(8%) saturate(420%) hue-rotate(350deg) brightness(103%) contrast(94%);
+        }
+
+        /* Heráldica del footer: viene en guinda/gris, se vuelve blanca para
+           leerse sobre el fondo guinda (igual que "color-blanco" en el sitio oficial). */
+        .footer-heraldica-white {
+            filter: brightness(0) invert(1);
+            opacity: .92;
+        }
+
+        /* ================= DOODLES DECORATIVOS FLOTANTES ================= */
+        .doodle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        @keyframes floaty {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(var(--rot, 0deg));
+            }
+
+            50% {
+                transform: translateY(-16px) rotate(var(--rot, 0deg));
+            }
+        }
+
+        @keyframes spinSlow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: .85;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .45;
+                transform: scale(.9);
+            }
+        }
+
+        .anim-float {
+            animation: floaty 6s ease-in-out infinite;
+        }
+
+        .anim-float-slow {
+            animation: floaty 9s ease-in-out infinite;
+        }
+
+        .anim-spin {
+            animation: spinSlow 40s linear infinite;
+        }
+
+        .anim-twinkle {
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        /* Flecha junto al texto "Desliza hacia abajo": se mece de lado a lado. */
+        @keyframes bounceSide {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(6px);
+            }
+        }
+
+        .anim-bounce-side {
+            display: inline-block;
+            animation: bounceSide 1s ease-in-out infinite;
+        }
+
+        /* Bamboleo: gira hacia un lado y hacia el otro (no vuelta completa).
+           La amplitud se controla con --wob (grados) y la velocidad con --wob-speed. */
+        @keyframes wobble {
+
+            0%,
+            100% {
+                transform: rotate(calc(var(--wob, 10deg) * -1));
+            }
+
+            50% {
+                transform: rotate(var(--wob, 10deg));
+            }
+        }
+
+        .anim-wobble {
+            transform-origin: 50% 50%;
+            animation: wobble var(--wob-speed, 4s) ease-in-out infinite;
+        }
+
+        /* ================= BOTONES / TARJETAS JUGUETONAS ================= */
+        .btn-pop {
+            display: inline-block;
+            font-weight: 700;
+            border-radius: 999px;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        .btn-pop:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+        }
+
+        .btn-pop:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.12);
+        }
+
+        .fun-card {
+            background: #fff;
+            border: 4px solid var(--color-guinda);
+            border-radius: 28px;
+            box-shadow: 0 12px 0 rgba(92, 17, 60, 0.12);
+            transition: transform .2s ease;
+        }
+
+        .fun-card:hover {
+            transform: translateY(-6px) rotate(-1deg);
+        }
+
+        .icon-blob {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
+        }
+
+        /* ================= REVEAL AL HACER SCROLL ================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px) scale(.98);
+            transition: opacity .7s cubic-bezier(.34, 1.56, .64, 1), transform .7s cubic-bezier(.34, 1.56, .64, 1);
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Al recargar: lo que ya está en pantalla aparece en su sitio SIN deslizarse
+           (evita el "salto hacia arriba"); solo animan los que entran luego al scroll. */
+        html.preload .reveal,
+        html.preload .cloud-wrapper {
+            transition: none !important;
+        }
+
+        /* ================= NUBES: SECCIÓN PINNED CONTROLADA POR SCROLL =========
+           .clouds-scroll da la DISTANCIA de scroll; su hijo .clouds-stage queda
+           fijo (sticky) ocupando el viewport. El progreso 0->1 se calcula en JS a
+           partir de cuánto se ha avanzado dentro de .clouds-scroll, y controla el
+           spawn / escala / opacidad / posición de las 20 nubes (reutilizadas, sin
+           crear DOM extra). */
+        .clouds-scroll {
+            position: relative;
+            /* Distancia total de scroll (mayor = cada derecho se ve más tiempo). */
+            height: 340vh;
+        }
+
+        /* En móvil se ven menos nubes a la vez (columna de 3), así que se da
+           más recorrido para que cada derecho tenga su momento. */
+        @media (max-width: 700px) {
+            .clouds-scroll {
+                height: 460vh;
+            }
+        }
+
+        .clouds-stage {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .stage-head {
+            position: absolute;
+            top: 90px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 0 16px;
+            /* Por encima de las nubes: el título nunca queda tapado. */
+            z-index: 160;
+            pointer-events: none;
+        }
+
+        .cloud-progress {
+            width: 160px;
+            height: 6px;
+            margin: 14px auto 0;
+            background: rgba(92, 17, 60, 0.15);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .cloud-progress-bar {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: var(--color-dorado);
+            border-radius: 999px;
+        }
+
+        /* Cada nube: absoluta dentro del stage; su posición/escala/opacidad las fija
+           JS por frame (sin transición CSS -> el scroll es la línea de tiempo). */
+        .cloud-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: clamp(250px, 26vw, 340px);
+            opacity: 0;
+            z-index: 10;
+            will-change: transform, opacity;
+        }
+
+        /* Nubes con texto muy largo: un 25-30% más grandes para que el derecho
+           quepa cómodo sin verse apretado. El párrafo mantiene un ancho similar
+           al de las nubes normales (envuelve en más líneas) para que no dé la
+           sensación de que la letra creció; solo crece la nube. */
+        .cloud-wrapper--lg {
+            width: clamp(320px, 33vw, 435px);
+        }
+
+        .cloud-wrapper--lg .cloud-text {
+            max-width: 185px;
+            margin: 0 auto;
+        }
+
+        /* Nubes clicables: abren el modal con el texto extendido del derecho. */
+        .cloud-clickable {
+            cursor: pointer;
+        }
+
+        .cloud-clickable:hover .photo-cloud,
+        .cloud-clickable:focus-visible .photo-cloud {
+            filter: brightness(1.04);
+        }
+
+        /* ================= MODAL DE DERECHO ================= */
+        #right-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(56, 9, 31, 0.55);
+            backdrop-filter: blur(2px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        #right-modal-overlay.is-open {
+            display: flex;
+        }
+
+        #right-modal {
+            background: #fff;
+            border: 4px solid var(--color-guinda);
+            border-radius: 28px;
+            max-width: 480px;
+            width: 100%;
+            padding: 32px 28px 28px;
+            position: relative;
+            box-shadow: 0 20px 0 rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        #right-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--color-arena);
+            color: var(--color-guinda);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #right-modal-close:hover {
+            background: var(--color-dorado);
+        }
+
+        #right-modal-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--color-dorado);
+            color: var(--color-guinda);
+            font-family: 'Baloo 2', cursive;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 0 auto 12px;
+        }
+
+        #right-modal-title {
+            font-family: 'Baloo 2', cursive;
+            font-weight: 800;
+            color: var(--color-guinda);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        #right-modal-desc {
+            color: #3a2230;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Nube fotográfica: nube.png recortada, sin sombra (estilo minimalista).
+           El vaivén va aquí (elemento interno) para no chocar con el transform
+           que el JS pone en el wrapper; cada nube lleva su propio ritmo. */
+        .photo-cloud {
+            position: relative;
+            width: 100%;
+            animation: cloud-bob var(--bob-speed, 6s) ease-in-out infinite alternate;
+        }
+
+        @keyframes cloud-bob {
+            from { transform: translateY(-4px); }
+            to { transform: translateY(5px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .photo-cloud { animation: none; }
+        }
+
+        .photo-cloud-img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .photo-cloud-content {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 24% 15% 26%;
+            text-align: center;
+        }
+
+        .cloud-num {
+            flex: 0 0 auto;
+            font-family: 'Baloo 2', cursive;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: var(--color-dorado);
+            line-height: 1;
+        }
+
+        .cloud-text {
+            font-size: clamp(0.8rem, 1.6vw, 0.98rem);
+            font-weight: 600;
+            color: var(--color-guinda);
+            line-height: 1.18;
+            margin: 0;
+            transition: color .2s ease;
+        }
+
+        .cloud-clickable:hover .cloud-text,
+        .cloud-clickable:focus-visible .cloud-text {
+            color: var(--color-dorado);
+        }
+
+        /* Personajes que acompañan el sendero */
+        .path-buddy {
+            position: absolute;
+            z-index: 6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur border-b-4 border-dorado">
+        <div class="max-w-6xl mx-auto px-4 md:px-6 h-[92px] grid grid-cols-[auto_1fr_auto] items-center gap-3">
+            <a href="#inicio" class="flex items-center min-w-0">
+                <img src="Logos/SIPINNA-Logo_Horizontal-Guinda-Dorado.png" alt="SIPINNA Veracruz"
+                    class="h-20 w-auto max-w-[55vw]">
+            </a>
+            <nav class="hidden lg:flex items-center justify-center gap-7 text-lg font-semibold text-guinda whitespace-nowrap">
+                <a href="#que-es" class="hover:text-dorado transition-colors">¿Qué es?</a>
+                <a href="#derechos" class="hover:text-dorado transition-colors">Ley 573</a>
+                <a href="#entornos" class="hover:text-dorado transition-colors">Entornos Protectores</a>
+                <a href="#contacto" class="hover:text-dorado transition-colors">Contacto</a>
+            </nav>
+            <div class="flex items-center gap-3 justify-end">
+                <a href="https://forms.veracruzmunicipio.gob.mx/public/forms/xFymnLjTicTUkJT1RzmzlqJ4RzgtV0fefiuMCewAr6rgAqWkO1K1NCfBW8tggE6P"
+                    target="_blank" rel="noopener"
+                    class="hidden lg:inline-block btn-pop whitespace-nowrap px-5 py-2.5 bg-guinda text-white text-sm">
+                    Reportar un caso
+                </a>
+                <button id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false"
+                    aria-controls="mobile-menu"
+                    class="lg:hidden shrink-0 w-10 h-10 flex items-center justify-center text-guinda text-2xl">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav id="mobile-menu"
+            class="hidden lg:hidden flex-col bg-white/95 backdrop-blur border-t-2 border-dorado px-4 py-2 text-guinda font-semibold">
+            <a href="#que-es" class="block py-3 border-b border-guinda/10">¿Qué es?</a>
+            <a href="#derechos" class="block py-3 border-b border-guinda/10">Ley 573</a>
+            <a href="#entornos" class="block py-3 border-b border-guinda/10">Entornos Protectores</a>
+            <a href="#contacto" class="block py-3 border-b border-guinda/10">Contacto</a>
+            <a href="https://forms.veracruzmunicipio.gob.mx/public/forms/xFymnLjTicTUkJT1RzmzlqJ4RzgtV0fefiuMCewAr6rgAqWkO1K1NCfBW8tggE6P"
+                target="_blank" rel="noopener" class="block py-3 text-dorado">Reportar un caso</a>
+        </nav>
+    </header>
+
+    <!-- ================= HERO ================= -->
+    <section id="inicio" class="hero-bg relative pt-28 md:pt-32 pb-10 px-4 overflow-hidden">
+        <!-- Doodles decorativos -->
+        <!-- ☀️ SOL — mueve su posición cambiando top/left. Bamboleo: --wob = grados a
+             cada lado, --wob-speed = velocidad (valor mayor = más lento). -->
+        <img src="imagenes/Sol_caricatura.png" alt="" class="doodle tint-dorado anim-wobble w-24 md:w-32"
+            style="top: 120px; left: 70%; opacity: .9; --wob: 12deg; --wob-speed: 4s;">
+        <!-- 🌠 ESTRELLA FUGAZ — mueve su posición cambiando top/left. -->
+        <img src="imagenes/Estrella_fugaz.png" alt="" class="doodle tint-guinda anim-float w-14 md:w-20"
+            style="top: 135px; left: 6%; opacity: .8; --rot: -8deg;">
+        <!-- ⭐ Mini estrella de relleno (la misma, chiquita, dorada y titilando). -->
+        <img src="imagenes/Estrella_fugaz.png" alt="" class="doodle tint-dorado anim-twinkle w-8 md:w-10"
+            style="top: 300px; left: 90%; opacity: .55;">
+        <!-- 🕊️ AVES — parvada cerca del sol. -->
+        <img src="imagenes/Aves.png" alt="" class="doodle tint-guinda anim-float-slow w-14 md:w-20"
+            style="top: 210px; left: 78%; opacity: .5; --rot: -4deg;">
+
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-extrabold text-guinda leading-tight mb-4">
+                El Sendero de<br>tus Derechos
+            </h1>
+            <p class="text-lg md:text-2xl text-guinda/70 max-w-xl mx-auto mb-8 font-medium">
+                SIPINNA cuida y protege a todas las niñas, niños y adolescentes de Veracruz. ¡Conoce tus 20 derechos
+                entre las nubes!
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="#derechos" class="btn-pop px-6 py-3 bg-dorado text-guinda text-base md:text-lg">🌤️ Ver los 20
+                    derechos</a>
+                <a href="#contacto"
+                    class="btn-pop px-6 py-3 bg-white border-2 border-guinda text-guinda text-base md:text-lg">Contacto
+                    y ubicación</a>
+            </div>
+
+            <!-- Ilustración de niñas y niños -->
+            <div class="mt-10 relative">
+                <img src="imagenes/muchos_niños.png" alt="Niñas, niños y adolescentes de Veracruz"
+                    class="w-full max-w-3xl mx-auto drop-shadow-2xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= ¿QUÉ ES SIPINNA? ================= -->
+    <section id="que-es" class="py-16 md:py-20 px-4 max-w-6xl mx-auto relative">
+        <img src="imagenes/Bebé_niño.png" alt=""
+            class="hidden lg:block absolute -left-4 top-24 w-40 anim-float-slow z-0 opacity-95">
+
+        <div class="text-center max-w-2xl mx-auto mb-12 reveal relative z-10">
+            <span class="text-5xl mb-2 inline-block">🧭</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-guinda mb-4">¿Qué es SIPINNA?</h2>
+            <p class="text-guinda/70 font-medium text-lg md:text-xl">
+                Es el Sistema de Protección Integral de Niñas, Niños y Adolescentes que funge como autoridad de primer
+                contacto y canalización con las instancias de protección y restitución de derechos. Coordina acciones
+                entre instituciones, familias y comunidades para garantizar los derechos de la niñez y la adolescencia.
+            </p>
+        </div>
+
+        <div class="fun-card p-6 md:p-8 mb-12 max-w-3xl mx-auto reveal relative z-10"
+            style="border-color: var(--color-dorado); box-shadow: 0 12px 0 rgba(221,179,4,0.18);">
+            <h3 class="text-dorado font-extrabold uppercase text-base tracking-wide mb-2">Nuestro objetivo</h3>
+            <p class="text-guinda font-semibold text-xl md:text-2xl leading-snug">
+                Garantizar el pleno ejercicio, respeto, protección y promoción de los derechos humanos de niñas, niños y
+                adolescentes.
+            </p>
+        </div>
+
+        <h3 class="text-center text-guinda font-extrabold text-3xl mb-8 reveal">¿Cómo trabajamos?</h3>
+        <div class="grid md:grid-cols-3 gap-6 relative z-10">
+            <div class="fun-card p-6 text-center reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-guinda);"><i
+                        class="fa-solid fa-bullhorn"></i></div>
+                <h4 class="font-extrabold text-guinda mb-2 text-xl">Difusión</h4>
+                <p class="text-guinda/70 text-base font-medium">Pláticas en escuelas dirigidas a niños, padres de familia,
+                    personal docente y administrativo, servidores públicos y sociedad en general.</p>
+            </div>
+            <div class="fun-card p-6 text-center reveal">
+                <div class="icon-blob mx-auto mb-4"
+                    style="background: var(--color-dorado); color: var(--color-guinda);"><i
+                        class="fa-solid fa-headset"></i></div>
+                <h4 class="font-extrabold text-guinda mb-2 text-xl">Recibimos reportes</h4>
+                <p class="text-guinda/70 text-base font-medium">Reportes de posibles vulneraciones de derechos,
+                    presenciales o telefónicos, pudiendo ser anónimos.</p>
+            </div>
+            <div class="fun-card p-6 text-center reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-oro);"><i
+                        class="fa-solid fa-hand-holding-medical"></i></div>
+                <h4 class="font-extrabold text-guinda mb-2 text-xl">Canalizamos</h4>
+                <p class="text-guinda/70 text-base font-medium">Atención gratuita, con el propósito de garantizar el
+                    ejercicio de sus derechos: médica, psicológica, asesoría legal, etc. solicitada por su madre,
+                    padre o tutor.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= LEY 573 · SENDERO DE NUBES (fondo cielo) ================= -->
+    <div class="sky-bg">
+        <!-- SECCIÓN PINNED: el scroll no desplaza la página; alimenta un progreso 0->1
+             que hace que las nubes (los 20 derechos) se vayan acumulando en el cielo. -->
+        <div id="derechos" class="clouds-scroll">
+            <div class="clouds-stage">
+                <div class="stage-head reveal">
+                    <span class="text-4xl md:text-5xl mb-1 inline-block">✨</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-guinda mb-1">Los 20 derechos entre nubes</h2>
+                    <p class="text-guinda/80 font-medium text-base md:text-lg mx-auto flex items-center justify-center gap-2">
+                        ¡Desliza hacia abajo!
+                        <i class="fa-solid fa-chevron-down text-guinda/70 anim-bounce-side" aria-hidden="true"></i>
+                    </p>
+                    <div class="cloud-progress"><span class="cloud-progress-bar"></span></div>
+                </div>
+
+                <!-- ✨ Relleno del cielo: la misma estrella fugaz, tintada y en tamaños
+                     distintos, titilando detrás de las nubes. Muévelas con top/left. -->
+                <img src="imagenes/Estrella_fugaz.png" alt="" class="doodle tint-arena anim-twinkle w-10 md:w-14"
+                    style="top: 30%; left: 6%; opacity: 1;">
+                <img src="imagenes/Estrella_fugaz.png" alt="" class="doodle tint-dorado anim-twinkle w-8 md:w-12"
+                    style="top: 23%; left: 88%; opacity: .55; animation-delay: -1.6s;">
+                <img src="imagenes/Estrella_fugaz.png" alt="" class="doodle tint-arena anim-twinkle w-6 md:w-9"
+                    style="top: 74%; left: 4%; opacity: .9; animation-delay: -2.9s;">
+
+                <!-- 👧 Personaje que mira pasar las nubes (esquina inferior derecha). -->
+                <img src="imagenes/Adolescente_femenina_alta.png" alt=""
+                    class="path-buddy hidden md:block"
+                    style="right: 3%; bottom: 12px; height: clamp(160px, 30vh, 260px);">
+
+                <!-- 🪁 PAPALOTE — cruza el cielo con el scroll (el JS lo mueve con el
+                     progreso; empieza fuera de pantalla). -->
+                <img src="imagenes/papalote.png" alt="" id="papalote-cielo" class="doodle tint-guinda"
+                    style="left: 0; top: 0; width: clamp(70px, 9vw, 120px); opacity: .75; transform: translate(-300px, -300px);">
+
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la vida, a la supervivencia y al desarrollo" data-desc="Todas las niñas, niños y adolescentes deben disfrutar de una vida plena en condiciones acordes a su dignidad; tampoco deberán ser utilizados en conflictos armados o violentos.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">1</span>
+                        <p class="cloud-text">Derecho a la vida, a la supervivencia y al desarrollo</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Prioridad" data-desc="Tienen derecho a que se les asegure prioridad en cuanto a protección y socorro ante cualquier eventualidad así como ser atendidos antes que cualquier adulto en todos los servicios.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">2</span>
+                        <p class="cloud-text">Derecho a la Prioridad</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Identidad" data-desc="Tienen derecho a contar con un nombre y los apellidos que le correspondan así como a ser inscritos inmediatamente al Registro Civil, contar con una nacionalidad y preservar su identidad.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">3</span>
+                        <p class="cloud-text">Derecho a la Identidad</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a vivir en familia" data-desc="Tienen derecho a vivir con su familia y a no ser separados de las personas que ejerzan la patria potestad; en caso de que sus familias estén separadas, tienen derecho a mantener contacto con sus familiares de manera regular.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">4</span>
+                        <p class="cloud-text">Derecho a vivir en familia</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Igualdad Sustantiva" data-desc="Tienen derecho al mismo trato y oportunidades para el goce de sus derechos; las autoridades deben establecer políticas orientadas a eliminar los obstáculos para la igualdad de acceso y oportunidades a la alimentación, educación y atención médica.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">5</span>
+                        <p class="cloud-text">Derecho a la Igualdad Sustantiva</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a No ser Discriminado" data-desc="Niñas, niños y adolescentes tienen derecho a no ser sujetos de discriminación, limitación o restricción de sus derechos.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">6</span>
+                        <p class="cloud-text">Derecho a No ser Discriminado</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-wrapper--lg cloud-clickable" role="button" tabindex="0" data-title="Derecho a vivir en Condiciones de Bienestar y a un Sano Desarrollo Integral" data-desc="Tienen derecho a vivir en un medio ambiente sano y sustentable y en condiciones que permitan su desarrollo, bienestar, crecimiento saludable y armonioso.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">7</span>
+                        <p class="cloud-text">Derecho a vivir en Condiciones de Bienestar y a un Sano Desarrollo Integral</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-wrapper--lg cloud-clickable" role="button" tabindex="0" data-title="Derecho de Acceso a una Vida Libre de Violencia y a la Integridad Personal" data-desc="Tienen derecho a una vida libre de violencia y a que se resguarde su integridad personal; las autoridades tomarán las medidas para prevenir, atender y sancionar casos en que niñas, niños y adolescentes se vean afectados por conductas como el descuido, la negligencia, la trata, trabajo infantil o coacción a participar en algún delito.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">8</span>
+                        <p class="cloud-text">Derecho de Acceso a una Vida Libre de Violencia y a la Integridad Personal</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-wrapper--lg cloud-clickable" role="button" tabindex="0" data-title="Derecho a la protección de la Salud y a la Seguridad Social" data-desc="Todas las niñas, niños y adolescentes tienen derecho a gozar del más alto nivel posible de salud y a recibir la prestación de servicios de atención médica de gratuita y de calidad.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">9</span>
+                        <p class="cloud-text">Derecho a la protección de la Salud y a la Seguridad Social</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-wrapper--lg cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Inclusión de Niñas, Niños y Adolescentes con Discapacidad" data-desc="Tienen derecho a disfrutar de los derechos contenidos en la Ley, la Constitución y Tratados Internacionales; así como vivir incluidos en la comunidad y en igualdad de condiciones que las demás niñas, niños y adolescentes.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">10</span>
+                        <p class="cloud-text">Derecho a la Inclusión de Niñas, Niños y Adolescentes con Discapacidad</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Educación" data-desc="Tienen derecho a una educación de calidad que contribuya al conocimiento de sus propios derechos y basada en un enfoque de derechos humanos e igualdad sustantiva.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">11</span>
+                        <p class="cloud-text">Derecho a la Educación</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho al Descanso y el Esparcimiento" data-desc="Tienen derecho al descanso, al esparcimiento, al juego.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">12</span>
+                        <p class="cloud-text">Derecho al Descanso y el Esparcimiento</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-wrapper--lg cloud-clickable" role="button" tabindex="0" data-title="Derecho de la Libertad de Convicciones Éticas, Pensamiento, Conciencia, Religión y Cultura" data-desc="Tienen derecho a disfrutar libremente de su lengua, usos y costumbres, prácticas culturales, religión, recursos y formas específicas de organización social.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">13</span>
+                        <p class="cloud-text">Derecho de la Libertad de Convicciones Éticas, Pensamiento, Conciencia, Religión y Cultura</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-wrapper--lg cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Libertad de Expresión y Acceso a la Información" data-desc="Implica que se considere su opinión respecto a asuntos que les afecten directamente, a sus familias o comunidades.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">14</span>
+                        <p class="cloud-text">Derecho a la Libertad de Expresión y Acceso a la Información</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Participación" data-desc="Las autoridades están obligados a disponer e implementar mecanismos que garanticen la participación permanente y activa de niñas, niños y adolescentes en ámbitos familiar, escolar, social o comunitario.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">15</span>
+                        <p class="cloud-text">Derecho a la Participación</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho de Asociación y Reunión" data-desc="Todas las niñas, niños y adolescentes tienen derecho a asociarse y reunirse.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">16</span>
+                        <p class="cloud-text">Derecho de Asociación y Reunión</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Intimidad" data-desc="Tienen derecho a la intimidad personal y la protección de sus datos personales.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">17</span>
+                        <p class="cloud-text">Derecho a la Intimidad</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho a la Seguridad Jurídica y al Debido Proceso" data-desc="Todas las autoridades que sustancien procedimientos de carácter jurisdiccional o administrativo o que realicen cualquier acto de autoridad, garantizarán el interés superior de la niñez.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">18</span>
+                        <p class="cloud-text">Derecho a la Seguridad Jurídica y al Debido Proceso</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-clickable" role="button" tabindex="0" data-title="Derecho de Niñas, Niños y Adolescentes Migrantes" data-desc="Las autoridades de todos los órdenes deberán proporcionar servicios y protección correspondientes a niñas, niños y adolescentes migrantes.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">19</span>
+                        <p class="cloud-text">Derecho de Niñas, Niños y Adolescentes Migrantes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cloud-wrapper cloud-wrapper--lg cloud-clickable" role="button" tabindex="0" data-title="Derecho de acceso a las Tecnologías de la Información y comunicación" data-desc="Sin discriminación de ningún tipo o condición.">
+                <div class="photo-cloud"><img src="imagenes/nube_recortada.png" alt="" class="photo-cloud-img">
+                    <div class="photo-cloud-content"><span class="cloud-num">20</span>
+                        <p class="cloud-text">Derecho de acceso a las Tecnologías de la Información y comunicación</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ENTORNOS PROTECTORES ================= -->
+    <section id="entornos" class="py-16 md:py-20 px-4 max-w-6xl mx-auto relative">
+        <!-- 🕊️ AVES — doodle de fondo, esquina superior derecha. -->
+        <img src="imagenes/Aves.png" alt="" class="doodle tint-oro anim-float w-16 md:w-24"
+            style="top: 40px; right: 3%; opacity: .4; --rot: 5deg;">
+        <div class="text-center max-w-2xl mx-auto mb-6 reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-guinda mb-4">Entornos Protectores</h2>
+            <p class="text-guinda/70 font-medium text-lg md:text-xl">
+                Cuidar, proteger y garantizar derechos es una tarea compartida. Las niñas, niños y adolescentes
+                enfrentan mayores riesgos durante situaciones de violencia, crisis, emergencias o desastres; un
+                Entorno Protector ayuda a prevenir la violencia, reducir riesgos, cuidar la salud emocional,
+                garantizar derechos y favorecer su desarrollo integral.
+            </p>
+        </div>
+
+        <!-- ¿Qué es un Entorno Protector? (tríptico Veracruz Protector 2026) -->
+        <div class="max-w-3xl mx-auto text-center mb-6 reveal">
+            <h3 class="text-guinda font-extrabold text-2xl mb-4">¿Qué es un Entorno Protector?</h3>
+            <div class="flex flex-wrap justify-center gap-3 mb-4">
+                <span class="bg-white border-2 border-dorado text-guinda text-base font-bold px-4 py-2 rounded-full">
+                    🏠 Un espacio seguro</span>
+                <span class="bg-white border-2 border-dorado text-guinda text-base font-bold px-4 py-2 rounded-full">
+                    🤝 Una forma de relacionarnos</span>
+                <span class="bg-white border-2 border-dorado text-guinda text-base font-bold px-4 py-2 rounded-full">
+                    ✅ Un conjunto de acciones</span>
+                <span class="bg-white border-2 border-dorado text-guinda text-base font-bold px-4 py-2 rounded-full">
+                    💛 Un compromiso con los derechos de la niñez</span>
+            </div>
+            <p class="text-guinda/70 font-medium text-xl">
+                Donde las personas adultas <strong class="text-guinda">cuidan, escuchan, acompañan y
+                    protegen</strong> a niñas, niños y adolescentes.
+            </p>
+        </div>
+
+        <p class="text-center text-oro font-semibold text-base uppercase tracking-wide mb-10 reveal">Se construyen desde
+            distintos espacios</p>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="fun-card p-6 reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-guinda);"><i
+                        class="fa-solid fa-people-roof"></i></div>
+                <h3 class="font-extrabold text-guinda mb-2 text-2xl w-fit mx-auto text-left">Familia Protectora</h3>
+                <div class="flex justify-center">
+                    <ul class="text-guinda/70 text-base font-medium space-y-1 list-disc list-inside text-left inline-block">
+                    <li>Crianza positiva y afectiva</li>
+                    <li>Apoyo emocional</li>
+                    <li>Protección sin violencia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fun-card p-6 reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-dorado); color: var(--color-guinda);"><i
+                        class="fa-solid fa-school"></i></div>
+                <h3 class="font-extrabold text-guinda mb-2 text-2xl w-fit mx-auto text-left">Escuela Protectora</h3>
+                <div class="flex justify-center">
+                    <ul class="text-guinda/70 text-base font-medium space-y-1 list-disc list-inside text-left inline-block">
+                    <li>Ambientes escolares seguros</li>
+                    <li>Protocolos contra la violencia</li>
+                    <li>Docentes capacitados</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fun-card p-6 reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-oro);"><i
+                        class="fa-solid fa-shield-halved"></i></div>
+                <h3 class="font-extrabold text-guinda mb-2 text-2xl w-fit mx-auto text-left">Entorno Digital Protector</h3>
+                <div class="flex justify-center">
+                    <ul class="text-guinda/70 text-base font-medium space-y-1 list-disc list-inside text-left inline-block">
+                    <li>Navegación supervisada</li>
+                    <li>Prevención del acoso en línea</li>
+                    <li>Uso responsable de la tecnología</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fun-card p-6 reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-guinda);"><i
+                        class="fa-solid fa-building-shield"></i></div>
+                <h3 class="font-extrabold text-guinda mb-2 text-2xl w-fit mx-auto text-left">Institución Protectora</h3>
+                <div class="flex justify-center">
+                    <ul class="text-guinda/70 text-base font-medium space-y-1 list-disc list-inside text-left inline-block">
+                    <li>Atención oportuna</li>
+                    <li>Coordinación entre instituciones</li>
+                    <li>Personal capacitado</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fun-card p-6 reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-dorado); color: var(--color-guinda);"><i
+                        class="fa-solid fa-people-group"></i></div>
+                <h3 class="font-extrabold text-guinda mb-2 text-2xl w-fit mx-auto text-left">Comunidad Protectora</h3>
+                <div class="flex justify-center">
+                    <ul class="text-guinda/70 text-base font-medium space-y-1 list-disc list-inside text-left inline-block">
+                    <li>Redes de apoyo</li>
+                    <li>Participación comunitaria</li>
+                    <li>Cuidado colectivo</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fun-card p-6 reveal">
+                <div class="icon-blob mx-auto mb-4" style="background: var(--color-oro);"><i
+                        class="fa-solid fa-child-reaching"></i></div>
+                <h3 class="font-extrabold text-guinda mb-2 text-2xl w-fit mx-auto text-left">Niñez Protectora</h3>
+                <div class="flex justify-center">
+                    <ul class="text-guinda/70 text-base font-medium space-y-1 list-disc list-inside text-left inline-block">
+                    <li>Participación activa</li>
+                    <li>Conocimiento de sus derechos</li>
+                    <li>Liderazgo y expresión</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= ¿QUÉ NOS TOCA A CADA QUIEN? ================= -->
+    <section class="py-16 md:py-20 px-4 relative overflow-hidden" style="background: var(--color-guinda);">
+        <img src="imagenes/Estrella_fugaz.png" alt=""
+            class="doodle tint-dorado anim-twinkle w-16 top-10 right-10 opacity-70">
+        <!-- 🌙 LUNA — acompaña a la estrella en la sección guinda. -->
+        <img src="imagenes/Luna.png" alt="" class="doodle tint-dorado anim-float-slow w-14 md:w-20"
+            style="top: 60px; left: 5%; opacity: .55; --rot: -10deg;">
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white">¿Qué nos toca a cada quien?</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white/10 rounded-3xl p-6 text-center border-2 border-white/20 reveal">
+                    <div class="icon-blob mx-auto mb-4"
+                        style="background: var(--color-dorado); color: var(--color-guinda);"><i
+                            class="fa-solid fa-people-roof"></i></div>
+                    <h3 class="font-extrabold text-dorado mb-3 text-xl w-fit mx-auto text-left">Madres, padres y familias</h3>
+                    <div class="flex justify-center">
+                        <ul class="text-arena/85 text-base font-medium space-y-1.5 text-left inline-block">
+                        <li>Escuchar y acompañar</li>
+                        <li>Educar sin violencia</li>
+                        <li>Proteger y orientar</li>
+                        <li>Pedir apoyo cuando sea necesario</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white/10 rounded-3xl p-6 text-center border-2 border-white/20 reveal">
+                    <div class="icon-blob mx-auto mb-4"
+                        style="background: var(--color-dorado); color: var(--color-guinda);"><i
+                            class="fa-solid fa-chalkboard-user"></i></div>
+                    <h3 class="font-extrabold text-dorado mb-3 text-xl w-fit mx-auto text-left">Personal docente</h3>
+                    <div class="flex justify-center">
+                        <ul class="text-arena/85 text-base font-medium space-y-1.5 text-left inline-block">
+                        <li>Detectar señales de riesgo</li>
+                        <li>Promover espacios seguros</li>
+                        <li>Respetar y escuchar a NNA</li>
+                        <li>Canalizar casos oportunamente</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white/10 rounded-3xl p-6 text-center border-2 border-white/20 reveal">
+                    <div class="icon-blob mx-auto mb-4"
+                        style="background: var(--color-dorado); color: var(--color-guinda);"><i
+                            class="fa-solid fa-user-tie"></i></div>
+                    <h3 class="font-extrabold text-dorado mb-3 text-xl w-fit mx-auto text-left">Personas servidoras públicas</h3>
+                    <div class="flex justify-center">
+                        <ul class="text-arena/85 text-base font-medium space-y-1.5 text-left inline-block">
+                        <li>Atender con enfoque de derechos</li>
+                        <li>Coordinar acciones</li>
+                        <li>Priorizar el interés superior de la niñez</li>
+                        <li>Garantizar acceso a servicios y protección</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-arena/70 text-lg font-medium max-w-2xl mx-auto mt-12 reveal">
+                Cuidar a la niñez es una responsabilidad compartida. Desde casa, la escuela, las instituciones y la
+                comunidad, ¡todas y todos podemos ser parte de un Entorno Protector! 💛
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= CONTACTO ================= -->
+    <section id="contacto" class="py-16 md:py-20 px-4 max-w-6xl mx-auto relative">
+        <!-- ✈️ AVIÓN DE PAPEL — "mándanos tu reporte": doodle de fondo. -->
+        <img src="imagenes/avion_papel.png" alt="" class="doodle tint-guinda anim-float-slow w-24 md:w-32"
+            style="top: 30px; right: 4%; opacity: .3; --rot: -8deg;">
+        <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+            <span class="text-5xl mb-2 inline-block">📍</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-guinda mb-4">Contacto y ubicación</h2>
+        </div>
+
+        <div class="grid gap-8 max-w-3xl mx-auto">
+            <!-- SIPINNA Municipal -->
+            <div class="fun-card overflow-hidden reveal">
+                <div class="bg-guinda text-white px-6 py-4">
+                    <h3 class="font-extrabold text-lg">SIPINNA Municipio de Veracruz</h3>
+                </div>
+                <div class="p-6 text-base text-guinda/80 font-medium">
+                    <div class="grid sm:grid-cols-2 gap-x-8 gap-y-5">
+                        <div class="space-y-3">
+                            <h4 class="text-dorado font-extrabold uppercase text-xs tracking-widest mb-1">Contacto</h4>
+                            <p class="flex gap-3"><i class="fa-solid fa-user text-dorado w-4 mt-1"></i>
+                                Lic. Juan Genaro Rebolledo Montes — Secretario Ejecutivo del Sistema Municipal de
+                                Protección Integral de Niñas, Niños y Adolescentes (SIPINNA)</p>
+                            <p class="flex gap-3"><i class="fa-solid fa-phone text-dorado w-4 mt-1"></i> 229 961 0106 /
+                                229 961 0107</p>
+                            <p class="flex gap-3"><i class="fa-solid fa-envelope text-dorado w-4 mt-1"></i>
+                                <a href="mailto:sipinna@veracruzmunicipio.gob.mx"
+                                    class="hover:text-guinda underline">sipinna@veracruzmunicipio.gob.mx</a></p>
+                            <p class="flex gap-3"><i class="fa-brands fa-facebook text-dorado w-4 mt-1"></i>
+                                <a href="https://www.facebook.com/SIPINNAMpioVer" target="_blank" rel="noopener"
+                                    class="hover:text-guinda underline">facebook.com/SIPINNAMpioVer</a></p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="text-dorado font-extrabold uppercase text-xs tracking-widest mb-1">Ubicación</h4>
+                            <p class="flex gap-3"><i class="fa-solid fa-location-dot text-dorado w-4 mt-1"></i> Av. Ignacio
+                                Bustamante esq. Matamoros (instalaciones del DIF)
+                                <a href="https://www.google.com/maps/search/?api=1&query=DIF+Municipal+Av.+Ignacio+Bustamante+esquina+Matamoros+Veracruz"
+                                    target="_blank" rel="noopener"
+                                    class="text-dorado underline font-bold whitespace-nowrap">Ver mapa</a></p>
+                            <p class="flex gap-3"><i class="fa-solid fa-clock text-dorado w-4 mt-1"></i> Lunes a Viernes,
+                                8:00 a 15:00 hrs. Guardia de 15:00 a 20:00 hrs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= MODAL DE DERECHO ================= -->
+    <div id="right-modal-overlay">
+        <div id="right-modal" role="dialog" aria-modal="true" aria-labelledby="right-modal-title">
+            <button id="right-modal-close" type="button" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <span id="right-modal-num"></span>
+            <h3 id="right-modal-title"></h3>
+            <p id="right-modal-desc"></p>
+        </div>
+    </div>
+
+    <!-- ================= FRANJA ORO (igual que la oficial: palette-color-4) ================= -->
+    <div class="bg-oro text-guinda text-center font-extrabold text-sm md:text-base py-3 px-4 relative z-10">
+        Derechos reservados por el H. Ayuntamiento del Puerto de Veracruz 2026–2029
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-guinda text-arena pt-12 pb-8 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <img src="Logos/LOGO_FOOTER_VER.webp" alt="Veracruz Ciudad Heroica" class="h-24 md:h-32 w-auto shrink-0">
+
+                <div class="flex flex-col items-center gap-3 order-first md:order-none">
+                    <!-- Línea institucional (según sellos de los trípticos) -->
+                    <p class="text-center text-arena/70 text-xs font-semibold tracking-wide">
+                        H. Ayuntamiento de Veracruz · SIPINNA Municipal · Por Amor a Veracruz
+                    </p>
+
+                    <!-- Aviso de privacidad y sitios de interés estatales -->
+                    <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-arena/70 font-semibold">
+                        <a href="https://gobiernoabierto.veracruzmunicipio.gob.mx/wp-content/uploads/2026/04/Aviso-de-Privacidad-Integral-de-Primer-Contacto.pdf"
+                            target="_blank" rel="noopener" class="hover:text-dorado underline underline-offset-2 transition-colors">
+                            Aviso de privacidad
+                        </a>
+                        <span class="text-arena/40">·</span>
+                        <span class="text-arena/70">Sitios de interés:</span>
+                        <a href="https://egob.segobver.gob.mx/sisinfover/" target="_blank" rel="noopener"
+                            class="hover:text-dorado underline underline-offset-2 transition-colors">SISINFOVER</a>
+                        <span class="text-arena/40">·</span>
+                        <a href="https://www.segobver.gob.mx/sipinna/" target="_blank" rel="noopener"
+                            class="hover:text-dorado underline underline-offset-2 transition-colors">SIPINNA Estatal</a>
+                    </div>
+
+                    <p class="text-xs text-arena/60 text-center">&copy; 2026 H. Ayuntamiento de Veracruz · SIPINNA Municipal.</p>
+                </div>
+
+                <img src="Logos/HERALDICA_AMBOS-02.svg" alt="Heráldica H. Ayuntamiento de Veracruz"
+                    class="h-40 md:h-56 w-auto footer-heraldica-white shrink-0">
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= SCRIPTS ================= -->
+    <script>
+        // --- Modal de derecho (click en una nube de Ley 573) ---
+        (function () {
+            const overlay = document.getElementById('right-modal-overlay');
+            const numEl = document.getElementById('right-modal-num');
+            const titleEl = document.getElementById('right-modal-title');
+            const descEl = document.getElementById('right-modal-desc');
+            const closeBtn = document.getElementById('right-modal-close');
+            if (!overlay) return;
+
+            let lastFocused = null;
+
+            function openModal(cloud) {
+                const num = cloud.querySelector('.cloud-num');
+                numEl.textContent = num ? num.textContent : '';
+                titleEl.textContent = cloud.dataset.title || '';
+                descEl.textContent = cloud.dataset.desc || '';
+                lastFocused = document.activeElement;
+                overlay.classList.add('is-open');
+                closeBtn.focus();
+            }
+
+            function closeModal() {
+                overlay.classList.remove('is-open');
+                if (lastFocused) lastFocused.focus();
+            }
+
+            document.querySelectorAll('.cloud-clickable').forEach((cloud) => {
+                cloud.addEventListener('click', () => openModal(cloud));
+                cloud.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openModal(cloud);
+                    }
+                });
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
+            });
+        })();
+
+        // --- Menú móvil (hamburguesa) ---
+        (function () {
+            const btn = document.getElementById('menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            if (!btn || !menu) return;
+            function closeMenu() {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            }
+            function toggleMenu() {
+                const isOpen = menu.classList.contains('flex');
+                if (isOpen) { closeMenu(); return; }
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            }
+            btn.addEventListener('click', toggleMenu);
+            menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+        })();
+
+        // --- Reveal de secciones (fundido al entrar en pantalla) ---
+        const revealEls = Array.from(document.querySelectorAll('.reveal'));
+
+        function onScrollReveal() {
+            const trigger = window.innerHeight * 0.88;
+            for (const el of revealEls) {
+                if (el.classList.contains('is-visible')) continue;
+                if (el.getBoundingClientRect().top < trigger) {
+                    el.classList.add('is-visible');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', onScrollReveal, { passive: true });
+        window.addEventListener('resize', onScrollReveal);
+        window.addEventListener('load', onScrollReveal);
+
+        // Primera pintada: sin transición (aparece en su lugar, sin salto).
+        document.documentElement.classList.add('preload');
+        onScrollReveal();
+        const endPreload = () => document.documentElement.classList.remove('preload');
+        requestAnimationFrame(() => requestAnimationFrame(endPreload));
+        setTimeout(endPreload, 300); // respaldo por si rAF no dispara
+
+        // ================= NUBES: ANIMACIÓN CONTROLADA POR SCROLL =================
+        // Una sola variable de progreso (0->1), calculada dentro de .clouds-scroll (pinned).
+        // Modelo "relevo uniforme": las 20 nubes entran a ritmo CONSTANTE (todas se leen
+        // el mismo tiempo), cada una ocupa un hueco del cielo y, justo antes de que llegue
+        // su relevo, se despide flotando hacia arriba con el viento. Las últimas W se
+        // quedan formando el cielo final, con una pequeña pausa para apreciarlo.
+        (function () {
+            const scrollWrap = document.querySelector('.clouds-scroll');
+            const stage = document.querySelector('.clouds-stage');
+            const bar = document.querySelector('.cloud-progress-bar');
+            const clouds = Array.from(document.querySelectorAll('.cloud-wrapper'));
+            const kite = document.getElementById('papalote-cielo');
+            if (!scrollWrap || !stage || !clouds.length) return;
+
+            const N = clouds.length;
+            const frac = (x) => x - Math.floor(x);
+            const clamp01 = (x) => x < 0 ? 0 : x > 1 ? 1 : x;
+            const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+            const easeInCubic = (t) => t * t * t;
+
+            /* ================== CONFIGURACIÓN FÁCIL (EDITA AQUÍ) ==================
+
+               Huecos del cielo: lista de posiciones [x, y] en %
+               (x: 0=izq..100=der,  y: 0=arriba..100=abajo).
+               El nº de posiciones = cuántas nubes se ven a la vez.
+               Hay un juego para pantalla ancha y otro para móvil.          */
+            const SLOTS_ANCHA = [            // escritorio: 6 nubes en dos alturas
+                [12, 52], [27, 74], [45, 56], [63, 77], [88, 65], [73, 48]
+            ];
+            const SLOTS_MOVIL = [            // móvil: columna de 3
+                [50, 44], [50, 60], [50, 76]
+            ];
+            const MOVIL_MAX = 700;     // ancho de pantalla (px) por debajo del cual se usa la columna
+
+            // Ajustes secundarios (normalmente no hace falta tocarlos):
+            const JITTER = 3;          // % de variación por nube al reutilizar un hueco (0 = ninguna)
+            const ENTER = 0.05;        // qué tan rápido entra cada nube (0-1 del recorrido)
+            const EXIT = 0.05;         // qué tan rápido sale cada nube (0-1 del recorrido)
+            const HOLD_END = 0.08;     // pausa final con el cielo ya completo (0-1)
+            /* ===================================================================== */
+
+            // ---- MODO EDITOR (TEMPORAL): abre la página con  ?nubes=edit  para
+            // arrastrar los huecos con el mouse. Lo acomodado se guarda solo
+            // (localStorage) y también se usa en la vista normal para probarlo. ----
+            const EDIT = new URLSearchParams(location.search).get('nubes') === 'edit';
+            const LS_KEY = 'nubes-slots-v1';
+            const readSaved = () => {
+                try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); }
+                catch (e) { return {}; }
+            };
+
+            let slots, W, spawn, despawn, data;
+
+            function setup() {
+                const movil = window.innerWidth < MOVIL_MAX;
+                const guardado = readSaved()[movil ? 'movil' : 'ancha'];   // del modo editor
+                const base = movil ? SLOTS_MOVIL : SLOTS_ANCHA;
+                slots = (Array.isArray(guardado) && guardado.length ? guardado : base)
+                    .map(([x, y]) => [x / 100, y / 100]);
+                W = slots.length;      // nubes visibles a la vez
+
+                // Aparición a ritmo constante: la nube i entra en spawn[i]. Al estar
+                // espaciadas por igual, TODAS viven el mismo tiempo en pantalla.
+                const lastSpawn = 1 - HOLD_END - ENTER;   // la última termina antes de la pausa
+                spawn = [];
+                for (let i = 0; i < N; i++) spawn[i] = (i / (N - 1)) * lastSpawn;
+
+                // despawn[i]: la nube i TERMINA de salir justo cuando su relevo (i+W)
+                // empieza a entrar => nunca hay dos nubes a la vez en el mismo hueco.
+                // Las últimas W nunca se van (forman el cielo final).
+                despawn = [];
+                for (let i = 0; i < N; i++) {
+                    despawn[i] = (i < N - W) ? (spawn[i + W] - EXIT) : 2;
+                }
+
+                data = clouds.map((el, i) => {
+                    const [sx, sy] = slots[i % W];
+                    // vaivén propio: cada nube flota a su ritmo y desfasada de las demás
+                    const inner = el.firstElementChild;
+                    if (inner) {
+                        inner.style.setProperty('--bob-speed', (5 + frac(i * 0.53) * 3).toFixed(2) + 's');
+                        inner.style.animationDelay = '-' + (frac(i * 0.77) * 5).toFixed(2) + 's';
+                    }
+                    return {
+                        el, i,
+                        // pequeño corrimiento propio: el hueco reutilizado nunca cae
+                        // en el mismo punto exacto (rompe el efecto "semáforo")
+                        xPct: sx + (frac(i * 0.618) * 2 - 1) * JITTER / 100,
+                        yPct: sy + (frac(i * 0.377) * 2 - 1) * JITTER / 100,
+                        baseScale: 0.92 + frac(i * 0.324) * 0.18,    // 0.92 .. 1.10
+                        baseOpacity: 0.9 + frac(i * 0.71) * 0.1,     // 0.90 .. 1.0
+                        dirX: (i % 2 === 0) ? -1 : 1
+                    };
+                });
+            }
+
+            function render(p) {
+                const W_ = stage.clientWidth, H = stage.clientHeight;
+                for (const d of data) {
+                    const i = d.i;
+                    const enter = clamp01((p - spawn[i]) / ENTER);          // 0->1 al entrar
+                    const exit = clamp01((p - despawn[i]) / EXIT);          // 0->1 al salir
+                    const eIn = easeOutCubic(enter);
+                    const eOut = easeInCubic(exit);
+
+                    if (enter <= 0 || exit >= 1) {                          // aún no llega, o ya se fue
+                        d.el.style.opacity = '0';
+                        d.el.style.pointerEvents = 'none';                  // no debe robarle el click a la visible
+                        continue;
+                    }
+
+                    const opacity = eIn * (1 - eOut) * d.baseOpacity;
+                    const scale = d.baseScale * (0.82 + 0.18 * eIn) * (1 - 0.12 * eOut);
+
+                    // Entra desde abajo (y un poco de lado); sale hacia arriba y a la
+                    // derecha, como empujada por el viento. No lineal.
+                    const driftY = (1 - eIn) * 46 - eOut * 62;
+                    const driftX = (1 - eIn) * d.dirX * 22 + eOut * 36;
+                    // inclinación muy leve al entrar y al salir (mecida por el viento)
+                    const rot = (1 - eIn) * d.dirX * 3 + eOut * 2.5;
+
+                    const cx = d.xPct * W_ + driftX;
+                    const cy = d.yPct * H + driftY;
+                    const x = cx - d.el.offsetWidth / 2;
+                    const y = cy - d.el.offsetHeight / 2;
+
+                    // Las que entran más tarde, al frente; las que se van, detrás.
+                    d.el.style.zIndex = String(100 + i - Math.round(eOut * 50));
+                    d.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${scale.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
+                    d.el.style.opacity = opacity.toFixed(3);
+                    d.el.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
+                }
+                if (bar) bar.style.width = (p * 100).toFixed(1) + '%';
+
+                // 🪁 El papalote cruza el cielo de izquierda a derecha siguiendo el
+                // scroll, ondulando suavemente y ladeándose como si lo jalara el viento.
+                if (kite) {
+                    const kx = (0.04 + 0.84 * p) * W_;
+                    const ky = (0.30 + 0.05 * Math.sin(p * Math.PI * 3)) * H;
+                    const krot = 8 * Math.sin(p * Math.PI * 4);
+                    kite.style.transform =
+                        `translate(${kx.toFixed(1)}px, ${ky.toFixed(1)}px) rotate(${krot.toFixed(1)}deg)`;
+                }
+            }
+
+            function progress() {
+                const rect = scrollWrap.getBoundingClientRect();
+                const dist = rect.height - window.innerHeight;   // distancia mientras está pinned
+                if (dist <= 0) return 0;
+                return clamp01(-rect.top / dist);
+            }
+
+            let ticking = false;
+            function onScroll() {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => { render(progress()); ticking = false; });
+            }
+
+            setup();
+
+            if (!EDIT) {
+                window.addEventListener('scroll', onScroll, { passive: true });
+                window.addEventListener('resize', () => { setup(); render(progress()); });
+                window.addEventListener('load', () => render(progress()));
+                render(progress());
+                return;
+            }
+
+            /* ============ EDITOR DE HUECOS (TEMPORAL, se abre con ?nubes=edit) ============
+               Muestra una nube por hueco para arrastrarla con el mouse (o el dedo).
+               Cada cambio se guarda solo en localStorage y el panel muestra el código
+               listo para dejarlo fijo en SLOTS_ANCHA / SLOTS_MOVIL. */
+            const modo = () => (window.innerWidth < MOVIL_MAX ? 'movil' : 'ancha');
+
+            document.body.style.overflow = 'hidden';   // sin scroll: solo acomodar
+            window.scrollTo({ top: scrollWrap.offsetTop, behavior: 'instant' });
+            clouds.forEach(el => el.querySelectorAll('img').forEach(im => im.draggable = false));
+
+            const panel = document.createElement('div');
+            panel.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:9999;' +
+                'background:#5C113C;color:#fff;font:11px/1.6 Consolas,monospace;' +
+                'padding:10px 12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.35);max-width:340px';
+            panel.innerHTML =
+                '<b style="font-size:12px">☁ Editor de nubes — <span id="ne-modo"></span></b><br>' +
+                'Arrastra cada nube a su lugar; se guarda solo.<br>' +
+                '<pre id="ne-out" style="margin:6px 0;background:rgba(255,255,255,.12);padding:6px 8px;border-radius:6px;white-space:pre-wrap"></pre>' +
+                '<button id="ne-copy" style="background:#D6A72E;color:#5C113C;font-weight:bold;border:0;border-radius:6px;padding:4px 10px;cursor:pointer">Copiar código</button> ' +
+                '<button id="ne-reset" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:6px;padding:4px 10px;cursor:pointer">Restablecer</button>';
+            document.body.appendChild(panel);
+
+            const pct = () => slots.map(([x, y]) => [Math.round(x * 100), Math.round(y * 100)]);
+            const codigo = () => {
+                const nombre = modo() === 'movil' ? 'SLOTS_MOVIL' : 'SLOTS_ANCHA';
+                return 'const ' + nombre + ' = [\n    ' +
+                    pct().map(p => '[' + p[0] + ', ' + p[1] + ']').join(', ') + '\n];';
+            };
+
+            function place() {
+                const sw = stage.clientWidth, sh = stage.clientHeight;
+                clouds.forEach((el, i) => {
+                    if (i >= W) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; return; }
+                    const [sx, sy] = slots[i];
+                    el.style.opacity = '1';
+                    el.style.zIndex = String(100 + i);
+                    el.style.cursor = 'grab';
+                    el.style.pointerEvents = 'auto';
+                    el.style.touchAction = 'none';
+                    el.style.transform = 'translate(' + (sx * sw - el.offsetWidth / 2).toFixed(1) +
+                        'px, ' + (sy * sh - el.offsetHeight / 2).toFixed(1) + 'px)';
+                });
+                document.getElementById('ne-modo').textContent =
+                    modo() === 'movil' ? 'móvil (' + W + ' huecos)' : 'pantalla ancha (' + W + ' huecos)';
+                document.getElementById('ne-out').textContent = codigo();
+            }
+
+            function persist() {
+                const obj = readSaved();
+                obj[modo()] = pct();
+                localStorage.setItem(LS_KEY, JSON.stringify(obj));
+            }
+
+            let drag = null;
+            clouds.forEach((el, i) => {
+                el.addEventListener('pointerdown', (e) => {
+                    if (i >= W) return;
+                    drag = el;
+                    el.setPointerCapture(e.pointerId);
+                    e.preventDefault();
+                });
+                el.addEventListener('pointermove', (e) => {
+                    if (drag !== el) return;
+                    const r = stage.getBoundingClientRect();
+                    slots[i] = [
+                        Math.min(0.97, Math.max(0.03, (e.clientX - r.left) / r.width)),
+                        Math.min(0.95, Math.max(0.05, (e.clientY - r.top) / r.height))
+                    ];
+                    place();
+                });
+                el.addEventListener('pointerup', () => {
+                    if (drag === el) { drag = null; persist(); }
+                });
+            });
+
+            document.getElementById('ne-copy').addEventListener('click', () => {
+                const btn = document.getElementById('ne-copy');
+                const ok = () => { btn.textContent = '¡Copiado!'; setTimeout(() => { btn.textContent = 'Copiar código'; }, 1500); };
+                if (navigator.clipboard) navigator.clipboard.writeText(codigo()).then(ok, ok);
+                else ok();   // el código queda visible en el panel para copiarlo a mano
+            });
+            document.getElementById('ne-reset').addEventListener('click', () => {
+                const obj = readSaved();
+                delete obj[modo()];
+                localStorage.setItem(LS_KEY, JSON.stringify(obj));
+                setup();
+                place();
+            });
+
+            window.addEventListener('resize', () => { setup(); place(); });
+            place();
+        })();
+    </script>
+</body>
+
+</html>
